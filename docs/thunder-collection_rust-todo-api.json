@@ -1,0 +1,128 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "rust-todo-api",
+    "dateExported": "2023-03-08T23:46:01.309Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "90e33b0f-6cf7-4c3f-9496-19c350b3fb1c",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "hello-world",
+            "url": "localhost:8080",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-03-04T19:08:56.889Z",
+            "modified": "2023-03-04T19:18:15.997Z",
+            "headers": [],
+            "params": [],
+            "tests": [
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "Rust Todo API"
+                }
+            ]
+        },
+        {
+            "_id": "82a0acbd-4c7d-4c6d-b869-f5f6442d392c",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "get-todo",
+            "url": "localhost:8081/api/todo",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-03-04T19:42:00.039Z",
+            "modified": "2023-03-08T19:56:00.102Z",
+            "headers": [],
+            "params": [],
+            "tests": [
+                {
+                    "type": "Content-Type",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "application/json"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "0e0776f0-bf75-49a7-baae-8bca3e9c8412",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "add-todo",
+            "url": "localhost:8081/api/todo",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-03-04T20:20:26.107Z",
+            "modified": "2023-03-08T23:26:49.860Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\":4,\n  \"text\":\"first todo\",\n  \"completed\": false\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "568685a3-62ed-40b6-9973-646e32a58de2",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "delete-todo",
+            "url": "localhost:8081/api/todo/4",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-03-08T23:27:08.893Z",
+            "modified": "2023-03-08T23:33:03.147Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "90fe855c-6ec1-4ad3-b4be-e20d861f03eb",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "update-todo",
+            "url": "localhost:8081/api/todo/4",
+            "method": "PUT",
+            "sortNum": 50000,
+            "created": "2023-03-08T23:41:42.628Z",
+            "modified": "2023-03-08T23:42:26.228Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"completed\": false\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9e4124c6-4e57-4aa1-9b51-dc398a1493d3",
+            "colId": "47137780-408f-4b0f-9e06-6e0d339a101d",
+            "containerId": "",
+            "name": "get-todo-by-id",
+            "url": "localhost:8081/api/todo/4",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-03-08T23:44:29.532Z",
+            "modified": "2023-03-08T23:44:46.816Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

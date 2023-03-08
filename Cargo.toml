@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 actix-web = { version = "4", features = ["openssl"] }
 openssl = { version = "0.10" }
+serde = {version = "1.0", features= ["derive"]}
+tokio = { version = "1.26.0", features = ["full"] }
+
