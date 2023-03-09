@@ -83,18 +83,20 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::clone(&app_state))
             .service(hello)
             .service(
-                web::scope("/api")
-                    .service(
-                        web::resource("/todo")
-                            .route(web::get().to(get_todos))
-                            .route(web::post().to(add_todo)),
-                    )
-                    .service(
-                        web::resource("/todo/{todo_id}")
-                            .route(web::delete().to(delete_todo))
-                            .route(web::put().to(update_todo))
-                            .route(web::get().to(get_todo_by_id)),
-                    ),
+                web::scope("/api").service(
+                    web::scope("/todo")
+                        .service(
+                            web::resource("")
+                                .route(web::get().to(get_todos))
+                                .route(web::post().to(add_todo)),
+                        )
+                        .service(
+                            web::resource("/{todo_id}")
+                                .route(web::delete().to(delete_todo))
+                                .route(web::put().to(update_todo))
+                                .route(web::get().to(get_todo_by_id)),
+                        ),
+                ),
             )
     })
     .bind(("127.0.0.1", 8081))?
