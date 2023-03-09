@@ -27,25 +27,33 @@ async fn hello(data: web::Data<AppState>) -> impl Responder {
 }
 
 async fn get_todos(state: web::Data<Mutex<AppState>>) -> impl Responder {
-    let data = state.lock().unwrap();
-    HttpResponse::Ok().json(&data.todos)
+    match state.lock() {
+        Ok(data) => HttpResponse::Ok().json(&data.todos),
+        Err(_) => HttpResponse::ServiceUnavailable().finish(),
+    }
 }
 
 async fn add_todo(req_body: web::Json<Todo>, state: web::Data<Mutex<AppState>>) -> impl Responder {
-    let mut data = state.lock().unwrap();
-    data.todos.push(req_body.into_inner());
-
-    HttpResponse::Created().finish()
+    match state.lock() {
+        Ok(mut data) => {
+            data.todos.push(req_body.into_inner());
+            HttpResponse::Created().finish()
+        }
+        Err(_) => HttpResponse::ServiceUnavailable().finish(),
+    }
 }
 
 async fn delete_todo(path: web::Path<i32>, state: web::Data<Mutex<AppState>>) -> impl Responder {
-    let mut data = state.lock().unwrap();
-    let todo_id = path.into_inner();
-
-    let todo_to_delete_index = data.todos.iter().position(|x| x.id == todo_id).unwrap();
-    data.todos.remove(todo_to_delete_index);
-
-    HttpResponse::Ok().finish()
+    match state.lock() {
+        Ok(mut data) => match find_todo_index(&data.todos, path.into_inner()) {
+            Some(index) => {
+                data.todos.remove(index);
+                HttpResponse::Ok().finish()
+            }
+            None => HttpResponse::NotFound().finish(),
+        },
+        Err(_) => HttpResponse::ServiceUnavailable().finish(),
+    }
 }
 
 async fn update_todo(
@@ -53,22 +61,30 @@ async fn update_todo(
     req_body: web::Json<TodoPayload>,
     state: web::Data<Mutex<AppState>>,
 ) -> impl Responder {
-    let mut data = state.lock().unwrap();
-    let todo_id = path.into_inner();
-
-    let todo_to_update_index = data.todos.iter().position(|x| x.id == todo_id).unwrap();
-    data.todos[todo_to_update_index].completed = req_body.into_inner().completed;
-
-    HttpResponse::Ok().finish()
+    match state.lock() {
+        Ok(mut data) => match find_todo_index(&data.todos, path.into_inner()) {
+            Some(index) => {
+                data.todos[index].completed = req_body.into_inner().completed;
+                HttpResponse::Ok().finish()
+            }
+            None => HttpResponse::NotFound().finish(),
+        },
+        Err(_) => HttpResponse::ServiceUnavailable().finish(),
+    }
 }
 
 async fn get_todo_by_id(path: web::Path<i32>, state: web::Data<Mutex<AppState>>) -> impl Responder {
-    let data = state.lock().unwrap();
-    let todo_id = path.into_inner();
+    match state.lock() {
+        Ok(data) => match find_todo_index(&data.todos, path.into_inner()) {
+            Some(index) => HttpResponse::Ok().json(&data.todos[index]),
+            None => HttpResponse::NotFound().finish(),
+        },
+        Err(_) => HttpResponse::ServiceUnavailable().finish(),
+    }
+}
 
-    let todo_index = data.todos.iter().position(|x| x.id == todo_id).unwrap();
-
-    HttpResponse::Ok().json(&data.todos[todo_index])
+fn find_todo_index(todos: &[Todo], todo_id: i32) -> Option<usize> {
+    todos.iter().position(|x| x.id == todo_id)
 }
 
 #[main]
